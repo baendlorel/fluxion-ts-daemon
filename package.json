@@ -1,5 +1,5 @@
 {
-  "name": "fluxion-daemon",
+  "name": "@fluxion-ts/daemon",
   "version": "1.0.0",
   "description": "Rust-based Linux daemon process manager with JavaScript launcher for cross-platform support",
   "main": "index.js",
