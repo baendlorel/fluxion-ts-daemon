@@ -11,7 +11,7 @@ console.log('🚀 Building fluxion-daemon...');
 try {
   // Step 1: Build Rust binary
   console.log('📦 Building Rust binary...');
-  execSync('cargo build --release', { cwd: PROJECT_ROOT, stdio: 'inherit' });
+  execSync('cargo build --release', { stdio: 'inherit' });
 
   // Step 2: Create dist directory
   console.log('📁 Creating dist directory...');
@@ -21,7 +21,7 @@ try {
 
   // Step 3: Copy Rust binary to dist
   console.log('📋 Copying Rust binary to dist...');
-  const rustBinary = join(PROJECT_ROOT, 'target/release/fluxion-daemon');
+  const rustBinary = 'target/release/fluxion-daemon';
   const distBinary = join(DIST_DIR, 'fluxion-daemon');
 
   copyFileSync(rustBinary, distBinary);
@@ -29,7 +29,7 @@ try {
 
   // Step 4: Copy cli directory to dist
   console.log('📋 Copying cli files to dist...');
-  const cliSource = join(PROJECT_ROOT, 'cli/index.js');
+  const cliSource = 'cli/index.js';
   const cliDest = join(DIST_DIR, 'index.js');
 
   copyFileSync(cliSource, cliDest);

@@ -37,18 +37,17 @@ impl ProcessManager {
             self.spawn_process()?;
             self.wait_for_exit()?;
 
-            self.log(&format!("Scheduling restart #{}", self.restart_count + 1), "INFO");
+            self.log(
+                &format!("Scheduling restart #{}", self.restart_count + 1),
+                "INFO",
+            );
 
             thread::sleep(Duration::from_millis(self.config.restart_delay));
         }
     }
 
     fn spawn_process(&mut self) -> Result<()> {
-        let cmd_str = format!(
-            "{} {}",
-            self.config.command,
-            self.config.args.join(" ")
-        );
+        let cmd_str = format!("{} {}", self.config.command, self.config.args.join(" "));
 
         self.log(&format!("Executing: {}", cmd_str), "INFO");
 
@@ -60,9 +59,7 @@ impl ProcessManager {
             .stderr(Stdio::inherit())
             .envs(self.config.env.iter().cloned())
             .spawn()
-            .map_err(|e| {
-                DaemonError::Process(format!("Failed to spawn '{}': {}", cmd_str, e))
-            })?;
+            .map_err(|e| DaemonError::Process(format!("Failed to spawn '{}': {}", cmd_str, e)))?;
 
         self.child_process = Some(child);
         self.restart_count += 1;
@@ -79,9 +76,9 @@ impl ProcessManager {
 
     fn wait_for_exit(&mut self) -> Result<()> {
         if let Some(mut child) = self.child_process.take() {
-            let status = child.wait().map_err(|e| {
-                DaemonError::Process(format!("Failed to wait for process: {}", e))
-            })?;
+            let status = child
+                .wait()
+                .map_err(|e| DaemonError::Process(format!("Failed to wait for process: {}", e)))?;
 
             if status.success() {
                 self.log("Process exited normally", "SUCCESS");
@@ -152,10 +149,10 @@ impl ProcessManager {
 
         // Console output with colors
         let colored_msg = match level {
-            "INFO" => format!("\x1b[36m{}\x1b[0m", log_msg),    // cyan
-            "SUCCESS" => format!("\x1b[32m{}\x1b[0m", log_msg),  // green
-            "WARN" => format!("\x1b[33m{}\x1b[0m", log_msg),     // yellow
-            "ERROR" => format!("\x1b[31m{}\x1b[0m", log_msg),    // red
+            "INFO" => format!("\x1b[36m{}\x1b[0m", log_msg), // cyan
+            "SUCCESS" => format!("\x1b[32m{}\x1b[0m", log_msg), // green
+            "WARN" => format!("\x1b[33m{}\x1b[0m", log_msg), // yellow
+            "ERROR" => format!("\x1b[31m{}\x1b[0m", log_msg), // red
             _ => log_msg.clone(),
         };
 

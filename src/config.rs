@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use crate::error::{DaemonError, Result};
+use std::path::PathBuf;
 
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -29,11 +29,6 @@ impl Default for Config {
 }
 
 impl Config {
-    pub fn with_working_directory(mut self, cwd: PathBuf) -> Self {
-        self.cwd = cwd;
-        self
-    }
-
     pub fn validate(&self) -> Result<()> {
         if self.command.is_empty() {
             return Err(DaemonError::Config("Command cannot be empty".to_string()));

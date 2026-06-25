@@ -28,7 +28,7 @@ impl Daemon {
         self.log("Successfully daemonized", "SUCCESS");
 
         // Start process manager
-        let mut process_manager = ProcessManager::new(self.config.clone());
+        let process_manager = ProcessManager::new(self.config.clone());
         self.process_manager = Some(process_manager);
 
         // Run the process manager
@@ -81,7 +81,7 @@ impl Daemon {
             libc::umask(0);
 
             // Close all open file descriptors
-            let maxfd = unsafe { libc::sysconf(libc::_SC_OPEN_MAX) } as i32;
+            let maxfd = libc::sysconf(libc::_SC_OPEN_MAX) as i32;
             for fd in 0..maxfd {
                 if fd != libc::STDIN_FILENO
                     && fd != libc::STDOUT_FILENO
