@@ -2,16 +2,16 @@
   "name": "@fluxion-ts/daemon",
   "version": "1.0.0",
   "description": "Rust-based Linux daemon process manager with JavaScript launcher for cross-platform support",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js",
-    "build": "cargo build --release",
+    "start": "node cli/index.js",
+    "dev": "node cli/index.js",
+    "build": "node build.js",
     "build:debug": "cargo build",
     "install": "npm run build || echo 'Rust build skipped - will build on first use'",
     "test": "cargo test",
-    "clean": "cargo clean"
+    "clean": "cargo clean && rm -rf dist"
   },
   "keywords": [
     "daemon",
@@ -24,7 +24,7 @@
   "author": "",
   "license": "MIT",
   "bin": {
-    "fluxion-daemon": "./index.js"
+    "fluxion-daemon": "./dist/index.js"
   },
   "dependencies": {},
   "devDependencies": {},
@@ -41,9 +41,8 @@
     "arm64"
   ],
   "files": [
-    "index.js",
-    "target/release/fluxion-daemon",
-    "target/release/fluxion-daemon.exe",
+    "cli/",
+    "dist/",
     "README.md",
     "package.json"
   ]
