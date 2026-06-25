@@ -1,0 +1,50 @@
+{
+  "name": "fluxion-daemon",
+  "version": "1.0.0",
+  "description": "Rust-based Linux daemon process manager with JavaScript launcher for cross-platform support",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "build": "cargo build --release",
+    "build:debug": "cargo build",
+    "install": "npm run build || echo 'Rust build skipped - will build on first use'",
+    "test": "cargo test",
+    "clean": "cargo clean"
+  },
+  "keywords": [
+    "daemon",
+    "process-manager",
+    "linux",
+    "auto-restart",
+    "rust",
+    "process-guardian"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bin": {
+    "fluxion-daemon": "./index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "os": [
+    "linux",
+    "darwin",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "files": [
+    "index.js",
+    "target/release/fluxion-daemon",
+    "target/release/fluxion-daemon.exe",
+    "README.md",
+    "package.json"
+  ]
+}

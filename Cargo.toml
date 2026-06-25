@@ -1,0 +1,15 @@
+[package]
+name = "fluxion-daemon"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Minimal dependencies for daemon functionality
+libc = "0.2"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

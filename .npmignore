@@ -1,0 +1,36 @@
+# Rust/Cargo files
+Cargo.toml
+Cargo.lock
+target/
+src/*.rs
+
+# Git files
+.git/
+.gitignore
+
+# Documentation files
+draft/
+*.md
+!README.md
+
+# Log files
+*.log
+daemon.log
+
+# Node modules
+node_modules/
+
+# Test files
+test/
+*.test.js
+*.test.ts
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
