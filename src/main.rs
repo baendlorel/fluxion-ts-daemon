@@ -14,18 +14,13 @@ fn print_usage() {
     println!("Usage: fluxion-daemon [OPTIONS]");
     println!();
     println!("Options:");
-    println!("  -C, --command <CMD>      Command to run (default: tsx)");
-    println!("  -a, --args <ARGS>        Arguments for command (default: main.ts)");
-    println!("  -w, --cwd <DIR>          Working directory (default: current)");
-    println!("  -d, --delay <MS>         Restart delay in milliseconds (default: 1000)");
-    println!("  -m, --max-restarts <N>   Maximum restarts (default: unlimited)");
-    println!("  -l, --log-file <FILE>    Log file path (default: daemon.log)");
+    println!("  -c, --command <CMD>      Full command to run (default: tsx main.ts)");
     println!("  -h, --help               Print this help");
     println!();
     println!("Examples:");
     println!("  fluxion-daemon");
-    println!("  fluxion-daemon --command node --args app.js");
-    println!("  fluxion-daemon --max-restarts 10 --delay 2000");
+    println!("  fluxion-daemon -c \"node app.js\"");
+    println!("  fluxion-daemon -c \"python server.py --port 3000\"");
 }
 
 fn parse_args() -> Result<Config> {
@@ -39,61 +34,17 @@ fn parse_args() -> Result<Config> {
                 print_usage();
                 exit(0);
             }
-            "-C" | "--command" => {
+            "-c" | "--command" => {
                 if i + 1 < args.len() {
-                    config.command = args[i + 1].clone();
+                    let full_cmd = &args[i + 1];
+                    let parts: Vec<&str> = full_cmd.split_whitespace().collect();
+                    if !parts.is_empty() {
+                        config.command = parts[0].to_string();
+                        config.args = parts[1..].iter().map(|s| s.to_string()).collect();
+                    }
                     i += 2;
                 } else {
                     return Err(DaemonError::Config("Missing command".to_string()));
-                }
-            }
-            "-a" | "--args" => {
-                if i + 1 < args.len() {
-                    config.args = args[i + 1]
-                        .split_whitespace()
-                        .map(|s| s.to_string())
-                        .collect();
-                    i += 2;
-                } else {
-                    return Err(DaemonError::Config("Missing arguments".to_string()));
-                }
-            }
-            "-w" | "--cwd" => {
-                if i + 1 < args.len() {
-                    config.cwd = PathBuf::from(&args[i + 1]);
-                    i += 2;
-                } else {
-                    return Err(DaemonError::Config("Missing working directory".to_string()));
-                }
-            }
-            "-d" | "--delay" => {
-                if i + 1 < args.len() {
-                    config.restart_delay = args[i + 1]
-                        .parse()
-                        .map_err(|_| DaemonError::Config("Invalid restart delay".to_string()))?;
-                    i += 2;
-                } else {
-                    return Err(DaemonError::Config("Missing restart delay".to_string()));
-                }
-            }
-            "-m" | "--max-restarts" => {
-                if i + 1 < args.len() {
-                    config.max_restarts = Some(
-                        args[i + 1]
-                            .parse()
-                            .map_err(|_| DaemonError::Config("Invalid max restarts".to_string()))?
-                    );
-                    i += 2;
-                } else {
-                    return Err(DaemonError::Config("Missing max restarts".to_string()));
-                }
-            }
-            "-l" | "--log-file" => {
-                if i + 1 < args.len() {
-                    config.log_file = PathBuf::from(&args[i + 1]);
-                    i += 2;
-                } else {
-                    return Err(DaemonError::Config("Missing log file path".to_string()));
                 }
             }
             _ => {
